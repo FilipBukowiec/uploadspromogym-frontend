@@ -1,0 +1,61 @@
+:host {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+form {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+img {
+  margin-top: 20px;
+  width: 100px;
+}
+
+button {
+  margin-bottom: 30px;
+}
+
+input,
+select {
+  border-radius: 5px;
+  padding: 0px;
+  width: 300px;
+  text-align: center;
+  height: 20px;
+  margin: 0;
+}
+
+p {
+  text-align: justify;
+}
+
+.terms {
+  font-size: 12.5px;
+}
+
+table {
+  width: 300px;
+}
+
+.terms1 {
+  width: auto;
+}
+
+td {
+  padding: 5px;
+  text-align: justify;
+  height: 40px;
+}
+
+a {
+  cursor: pointer;
+  color: rgb(0, 183, 255);
+  text-decoration: underline;
+}

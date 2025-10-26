@@ -1,0 +1,43 @@
+<img class="logo" src="assets/images/promogym_logo.svg" alt="" />
+
+<form (ngSubmit)="onSubmit()" #eventForm="ngForm">
+
+    <select [(ngModel)]="event.type" name="type" id="type" required>
+        <option value="" disabled="true" selected hidden>Wybierz rodzaj wydarzenia</option>
+        @for(type of eventTypes; track $index){
+        <option [value]="type">{{type}}</option>
+        }
+    </select>
+
+    <input type="text" [(ngModel)]="event.city" name="city" required placeholder="Wpisz miasto wydarzenia">
+
+
+    <input [type]="focused || event.date ? 'month' : 'text'" [(ngModel)]="event.date" name="Date" required
+        placeholder="Data wydarzenia" (focus)="focused = true" (blur)="focused = false">
+
+
+    <input type="text" [(ngModel)]="event.clubCity" name="cityClub" required
+        placeholder="Wpisz nazwę Twojego klubu i miasto">
+
+    <input type="file" multiple (change)="onFileSelected($event)" name="files" required>
+
+    @if(loader){
+    <app-loader></app-loader>
+    }
+
+    <table>
+        <tr>
+            <td><input class="terms1" type="checkbox" required [(ngModel)]="event.terms" name="terms"
+                    #termsCtrl="ngModel"></td>
+            <td class="terms">Wyrażam zgodę na udostępnianie plików. <a (click)="more()">Kliknij tutaj</a> aby uzyskać
+                szczegółowe infor-macje.</td>
+        </tr>
+    </table>
+
+
+    <!-- @if(termsCtrl.invalid && (termsCtrl.touched || eventForm.submitted))
+    {
+    <p>Zaakceptuj warunki</p>
+    } -->
+    <button type="submit">Wyślij</button>
+</form>
