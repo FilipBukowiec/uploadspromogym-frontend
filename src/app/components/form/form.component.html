@@ -1,43 +1,57 @@
 <img class="logo" src="assets/images/logo.png" alt="" />
 
-<form (ngSubmit)="onSubmit()" #eventForm="ngForm">
-
-    <select [(ngModel)]="event.type" name="type" id="type" required>
-        <option value="" disabled="true" selected hidden>Wybierz rodzaj wydarzenia</option>
-        @for(type of eventTypes; track $index){
-        <option [value]="type">{{type}}</option>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <select class="form-select" formControlName="type" id="type" required>
+        <option value="" disabled selected hidden>Wybierz rodzaj wydarzenia</option>
+        @for (type of eventTypes; track $index) {
+        <option [value]="type">{{ type }}</option>
         }
     </select>
 
-    <input type="text" [(ngModel)]="event.city" name="city" required placeholder="Wpisz miasto wydarzenia">
+    <input class="form-control input-white" type="text" formControlName="city" placeholder="Wpisz miasto wydarzenia" />
 
+    <input class="form-control input-white" [type]="focused || form.get('date')?.value ? 'month' : 'text'"
+        formControlName="date" placeholder="Data wydarzenia" (focus)="focused = true" (blur)="focused = false" />
 
-    <input [type]="focused || event.date ? 'month' : 'text'" [(ngModel)]="event.date" name="Date" required
-        placeholder="Data wydarzenia" (focus)="focused = true" (blur)="focused = false">
+    <input class="form-control input-white" type="text" formControlName="clubCity"
+        placeholder="Wpisz nazwę Twojego klubu i miasto" />
 
+    <input #fileInput class="form-control input-files" type="file" multiple (change)="onFileSelected($event)" id="inputGroupFile03"
+        aria-describedby="inputGroupFileAddon03" aria-label="Upload" />
 
-    <input type="text" [(ngModel)]="event.clubCity" name="cityClub" required
-        placeholder="Wpisz nazwę Twojego klubu i miasto">
-
-    <input type="file" multiple (change)="onFileSelected($event)" name="files" required>
-
-    @if(loader){
+    @if (loader) {
     <app-loader></app-loader>
     }
 
     <table>
         <tr>
-            <td><input class="terms1" type="checkbox" required [(ngModel)]="event.terms" name="terms"
-                    #termsCtrl="ngModel"></td>
-            <td class="terms">Wyrażam zgodę na udostępnianie plików. <a (click)="more()">Kliknij tutaj</a> aby uzyskać
-                szczegółowe infor-macje.</td>
+            <td>
+                <input class="terms1" type="checkbox" formControlName="terms" />
+            </td>
+            <td class="terms">
+                Wyrażam zgodę na udostępnianie plików.
+                <a (click)="openTermsModal(termsModal)">Kliknij tutaj</a> aby uzyskać
+                szczegółowe infor-macje.
+            </td>
         </tr>
     </table>
-
-
-    <!-- @if(termsCtrl.invalid && (termsCtrl.touched || eventForm.submitted))
-    {
-    <p>Zaakceptuj warunki</p>
-    } -->
-    <button type="submit">Wyślij</button>
+    <button class="btn send-btn" type="submit">Wyślij</button>
 </form>
+
+
+
+<!-- modal do regulaminu -->
+<ng-template #termsModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Warunki i regulamin</h4>
+    </div>
+    <div class="modal-body">
+        <p>
+            Tutaj wklejasz treść regulaminu...<br />
+            Możesz mieć przewijanie, więc nawet długi tekst nie „ucieka”.
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="modal.close()">Zamknij</button>
+    </div>
+</ng-template>

@@ -1,16 +1,35 @@
+$blue: rgb(0, 166, 255);
+
 body,
 html {
   margin: 0;
   padding: 0;
   width: 100%;
   min-height: 100%;
-  background-image: url('assets/images/1.jpg');
+  background-image: url("assets/images/1.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: white;
-  font-family: 'Saira' !important;
+  font-family: "Saira", "Arial Narrow", Arial, sans-serif !important;
   display: flex;
   align-items: center;
+}
+
+// modal z bootstrap
+
+.dark-modal .modal-content {
+  background-color: #000000;
+  color: #fff;
+}
+
+.btn-secondary {
+  background-color: rgb(255, 255, 255) !important;
+  color: black !important;
+}
+
+.btn-secondary:hover {
+  background-color: $blue !important;
+  color: white !important;
 }

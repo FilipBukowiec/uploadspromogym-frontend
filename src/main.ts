@@ -3,12 +3,16 @@ import { AppComponent } from './app/app.component';
 import { provideHttpClient } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig = {
   providers: [
     provideHttpClient(),
     NgbModule,
-    BrowserAnimationsModule]
+    BrowserAnimationsModule,
+   provideAnimations(),
+  provideToastr()]
 };
 
 

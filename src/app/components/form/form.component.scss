@@ -1,3 +1,5 @@
+$blue: rgb(0, 166, 255);
+
 :host {
   display: flex;
   align-items: center;
@@ -18,34 +20,37 @@ img {
   width: 250px;
 }
 
-button {
-  margin-bottom: 30px;
+.form-control:focus,
+.form-select:focus {
+  box-shadow: none !important;
 }
 
-input,
-select {
-  border-radius: 5px;
-  padding: 0px;
+.form-control,
+.form-select {
+  height: 30px;
   width: 300px;
   text-align: center;
-  height: 20px;
-  margin: 0;
+  font-size: 14px;
+  font-weight: 450;
+  border: none !important;
+  padding: 5px;
 }
 
-p {
-  text-align: justify;
+.input-white {
+  background-color: white !important;
 }
 
-.terms {
-  font-size: 12.5px;
+#inputGroupFile03 {
+  background-color: transparent;
+  color: $blue;
+}
+
+.input-files {
+  padding: 5px 0 0 10px !important;
 }
 
 table {
   width: 300px;
-}
-
-.terms1 {
-  width: auto;
 }
 
 td {
@@ -54,8 +59,57 @@ td {
   height: 40px;
 }
 
+.terms {
+  font-size: 12.5px;
+  color: white;
+}
+
 a {
   cursor: pointer;
-  color: rgb(0, 183, 255);
-  text-decoration: underline;
+  color: $blue !important;
+  text-decoration: underline !important;
 }
+
+button {
+  margin-bottom: 30px;
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  // min-width: 200px;
+}
+
+.send-btn:hover{
+  background-color: $blue;
+  color: white;
+}
+
+.input-white:valid,
+.input-white:invalid {
+  background-color: white !important;
+  color: #000 !important;
+}
+
+
+.dark-modal .modal-content {
+  background-color: #000000;
+  color: #fff;
+}
+
+.dark-modal .btn-close {
+  filter: invert(1);
+}
+
+// .btn-secondary{
+//   background-color: rgb(255, 255, 255)!important;
+//   color: blue !important
+// }
+// .btn-secondary:hover{
+//   background-color: blue!important;
+//   color: white !important;
+
+// }
+
+.modal-header, .modal-footer{
+  border: none!important;
+}
+

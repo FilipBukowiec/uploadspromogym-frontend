@@ -1,87 +1,97 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, inject, TemplateRef, ViewChild } from '@angular/core';
 import { LoaderComponent } from '../loader/loader.component';
-import { FormsModule } from '@angular/forms';
-import { EventForm } from '../../models/event-form.model';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormService } from '../../services/form.service';
-
+import { NgbModal, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-form',
-  imports: [CommonModule, LoaderComponent, FormsModule],
+  imports: [CommonModule, LoaderComponent, NgbToastModule, ReactiveFormsModule],
   templateUrl: './form.component.html',
-  styleUrl: './form.component.scss'
+  styleUrl: './form.component.scss',
 })
 export class FormComponent {
-loader: boolean = false;
-  eventTypes = ["Hyrox", "CrossFit"];
-  focused: boolean = false;
+@ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
+  private modalService = inject(NgbModal);
 
-  event: EventForm = {
-    type: '',
-    city: '',
-    date: null,
-    clubCity: '',
-    files: null,
-    terms: false,
-  };
+  loader = false;
+  focused = false;
+  eventTypes = ['Hyrox', 'CrossFit'];
 
-  constructor(private formService: FormService) { }
+  form!: FormGroup;
 
+  constructor(
+    private fb: FormBuilder,
+    private formService: FormService,
+    private toastService: ToastService,
+  ) { }
+
+  ngOnInit() {
+    this.form = this.fb.group({
+      type: ['', Validators.required],
+      city: ['', Validators.required],
+      date: ['', Validators.required],
+      clubCity: ['', Validators.required],
+      files: [null, Validators.required],
+      terms: [false, Validators.requiredTrue],
+    });
+  }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.event.files = input.files ? Array.from(input.files) : null;
-  }
-
-  more() {
-    console.log("more")
+    const files = input.files ? Array.from(input.files) : null;
+    this.form.patchValue({ files });
   }
 
   onSubmit() {
-    if (!this.event.files?.length) return alert("Wybierz co najmniej 1 plik");
-    if (!this.event.terms) return alert("Zaakceptuj warunki");
-
-    const requiredFields = [
-      { value: this.event.type, name: 'Rodzaj wydarzenia' },
-      { value: this.event.city, name: 'Miasto' },
-      { value: this.event.clubCity, name: 'Nazwa klubu i miasto' },
-      { value: this.event.date, name: 'Data wydarzenia' }
-    ];
-
-    const emptyField = requiredFields.find(f => !f.value?.toString().trim());
-    if (emptyField) return alert(`Wypełnij pole: ${emptyField.name}`);
+    if (this.form.invalid) {
+      this.toastService.show('warning', 'Uzupełnij wszystkie wymagane pola', 'Błąd',)
+      this.form.markAllAsTouched();
+      return;
+    }
 
     this.loader = true;
     const formData = new FormData();
-    formData.append("type", this.event.type);
-    formData.append("city", this.event.city);
-    formData.append("date", this.event.date || "");
-    formData.append("clubCity", this.event.clubCity);
-    formData.append("terms", this.event.terms.toString());
+    const formValue = this.form.value;
 
-    this.event.files.forEach(file => {
-      formData.append("files", file);
-    })
+    formData.append('type', formValue.type);
+    formData.append('city', formValue.city);
+    formData.append('date', formValue.date || '');
+    formData.append('clubCity', formValue.clubCity);
+    formData.append('terms', formValue.terms.toString());
 
+    formValue.files.forEach((file: File) => {
+      formData.append('files', file);
+    });
 
     this.formService.uploadEvent(formData).subscribe({
       next: (data) => {
-        console.log("backend:", data);
         this.loader = false;
-        setTimeout(() => {
-          alert("Pliki wysłane");
-        }, 50);
+        this.toastService.show('success', 'Pliki wysłane pomyślnie!', 'Sukces');
+        this.form.reset();
+        this.form.get('type')?.setValue('');
+        this.fileInput.nativeElement.value = "";
+
       },
       error: (err) => {
-        console.error("Błąd wysyłki", err);
-        alert("Wystąpił błąd przy wysyłce plików")
-      }
-    })
+        this.loader = false;
+        console.error('Błąd wysyłki', err);
+        this.toastService.show('error', 'Nie udało się wysłać danych', 'Błąd');
+      },
+    });
+
+  }
+
+  openTermsModal(content: TemplateRef<any>) {
+    this.modalService.open(content, {
+      centered: true,
+      scrollable: true,
+      modalDialogClass: 'dark-modal',
+    });
   }
 }
-
-
 
 
