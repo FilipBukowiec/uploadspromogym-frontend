@@ -22,14 +22,22 @@ html {
 .dark-modal .modal-content {
   background-color: #000000;
   color: #fff;
+  text-align: justify;
 }
 
 .btn-secondary {
   background-color: rgb(255, 255, 255) !important;
   color: black !important;
+  box-shadow: none!important;
 }
 
 .btn-secondary:hover {
   background-color: $blue !important;
   color: white !important;
+}
+
+.terms1 {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
 }
